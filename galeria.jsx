@@ -454,6 +454,18 @@ const G_CSS = `
   }
 
   @media (max-width: 720px) {
+    .g-bento-wrap {
+      overflow-x: auto !important;
+      touch-action: pan-x pan-y !important;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .g-bento-wrap::-webkit-scrollbar {
+      display: none;
+    }
+    .g-bento-track {
+      transform: none !important;
+    }
     .g-bento-grid {
       grid-template-rows: repeat(2, 180px);
       grid-auto-columns: 200px;
@@ -666,6 +678,7 @@ function BentoGallery({ items, onSelect }) {
 
   // Drag handlers (mouse + touch via pointer)
   const onPointerDown = (e) => {
+    if (window.innerWidth <= 720) return;
     if (e.pointerType === "mouse" && e.button !== 0) return;
     dragRef.current = {
       dragging: true,
