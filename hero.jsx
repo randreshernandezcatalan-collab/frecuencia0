@@ -164,6 +164,10 @@ const FZ_CSS = `
     overflow: hidden;
     border: 1px solid var(--rule-strong);
     padding: 24px 20px;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     transition: border-color 0.3s, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.3s;
     background: rgba(10, 10, 10, 0.45);
     -webkit-backdrop-filter: blur(8px);
@@ -896,7 +900,7 @@ function MembersSection() {
               zIndex: 0,
               backgroundImage: `url(${m.image})`,
               backgroundSize: "cover",
-              backgroundPosition: "center 20%",
+              backgroundPosition: "center top",
               opacity: hoveredIndex === index ? 1 : 0,
               transition: "opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)",
               transform: hoveredIndex === index ? "scale(1.08)" : "scale(1.0)",
