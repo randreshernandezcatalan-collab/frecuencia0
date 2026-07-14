@@ -15,11 +15,11 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 const NAV = ["Integrantes", "Shows", "Música", "Galería"];
 
 const BAND_MEMBERS = [
-  { idx: "01", name: "Fer",    role: "Voz" },
-  { idx: "02", name: "Richi",  role: "Teclado" },
-  { idx: "03", name: "Vic",    role: "Bajo" },
-  { idx: "04", name: "Patito", role: "Guitarra" },
-  { idx: "05", name: "Bruno",  role: "Batería" },
+  { idx: "01", name: "Fer",    role: "Voz",      image: "uploads/voz.png" },
+  { idx: "02", name: "Richi",  role: "Teclado",  image: "uploads/piano.png" },
+  { idx: "03", name: "Vic",    role: "Bajo",     image: "uploads/bajo.png" },
+  { idx: "04", name: "Patito", role: "Guitarra", image: "uploads/guitarra.png" },
+  { idx: "05", name: "Bruno",  role: "Batería",  image: "uploads/bateria.png" },
 ];
 
 // Fuente única de fechas — banners del hero y sección Tour 2026 leen de aquí.
@@ -160,17 +160,18 @@ const FZ_CSS = `
     color: var(--accent);
   }
   .fz-member-card {
+    position: relative;
+    overflow: hidden;
     border: 1px solid var(--rule-strong);
-    padding: 14px 16px;
-    transition: background 0.2s, transform 0.25s;
-    background: rgba(0,0,0,0.18);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
+    padding: 24px 20px;
+    transition: border-color 0.3s, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.3s;
+    background: rgba(10, 10, 10, 0.45);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
   }
   .fz-member-card:hover {
-    background: var(--accent);
-    color: #0a0a0a;
-    transform: translateY(-2px);
+    border-color: var(--accent);
+    transform: translateY(-4px);
   }
 
   /* Interactive tour portfolio list */
@@ -849,6 +850,8 @@ function HeroStage({ tweaks, isPlaying, onTogglePlay }) {
 
 // ── Sección integrantes ───────────────────────────────────────
 function MembersSection() {
+  const [hoveredIndex, setHoveredIndex] = useState(-1);
+
   return (
     <section id="integrantes" style={{
       position: "relative", zIndex: 5,
@@ -879,24 +882,64 @@ function MembersSection() {
         gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
         gap: 16,
       }}>
-        {BAND_MEMBERS.map((m) => (
-          <div key={m.idx} className="fz-member-card">
+        {BAND_MEMBERS.map((m, index) => (
+          <div 
+            key={m.idx} 
+            className="fz-member-card"
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(-1)}
+          >
+            {/* Background image layer */}
             <div style={{
-              fontFamily: "var(--mono)", fontSize: 10,
-              letterSpacing: "0.18em", textTransform: "uppercase",
-              opacity: 0.6, marginBottom: 10,
-            }}>
-              {m.idx}
+              position: "absolute",
+              inset: 0,
+              zIndex: 0,
+              backgroundImage: `url(${m.image})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center 20%",
+              opacity: hoveredIndex === index ? 1 : 0,
+              transition: "opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)",
+              transform: hoveredIndex === index ? "scale(1.08)" : "scale(1.0)",
+              pointerEvents: "none"
+            }} />
+            
+            {/* Dark gradient overlay */}
+            <div style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 1,
+              background: "linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(10,10,10,0.9) 100%)",
+              opacity: hoveredIndex === index ? 1 : 0,
+              transition: "opacity 0.4s ease",
+              pointerEvents: "none"
+            }} />
+
+            {/* Content Container */}
+            <div style={{ position: "relative", zIndex: 2 }}>
+              <div style={{
+                fontFamily: "var(--mono)", fontSize: 10,
+                letterSpacing: "0.18em", textTransform: "uppercase",
+                opacity: 0.6, marginBottom: 10,
+                color: "var(--ink)",
+                transition: "color 0.3s"
+              }}>
+                {m.idx}
+              </div>
+              <div style={{
+                fontFamily: "var(--display)",
+                fontSize: 28, letterSpacing: "-0.02em",
+                textTransform: "uppercase", lineHeight: 1,
+                color: hoveredIndex === index ? "var(--accent)" : "var(--ink)",
+                transition: "color 0.3s"
+              }}>{m.name}</div>
+              <div style={{
+                marginTop: 8,
+                fontSize: 13, 
+                opacity: 0.8, 
+                fontWeight: 500,
+                color: "var(--ink)"
+              }}>{m.role}</div>
             </div>
-            <div style={{
-              fontFamily: "var(--display)",
-              fontSize: 28, letterSpacing: "-0.02em",
-              textTransform: "uppercase", lineHeight: 1,
-            }}>{m.name}</div>
-            <div style={{
-              marginTop: 8,
-              fontSize: 13, opacity: 0.8, fontWeight: 500,
-            }}>{m.role}</div>
           </div>
         ))}
       </div>
