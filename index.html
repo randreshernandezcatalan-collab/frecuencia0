@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frecuencia Cero</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrambleTextPlugin.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #f1ede6;
+      --ink: #0a0a0a;
+      --ink-2: #1a1a1a;
+      --rule: rgba(10,10,10,0.18);
+      --rule-strong: rgba(10,10,10,0.55);
+      --accent: #ff2d2d;
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+      --display: 'Archivo Black', 'Space Grotesk', sans-serif;
+      --sans: 'Space Grotesk', system-ui, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body[data-invert="1"] {
+      --bg: #0a0a0a;
+      --ink: #f1ede6;
+      --ink-2: #d8d4cd;
+      --rule: rgba(241,237,230,0.18);
+      --rule-strong: rgba(241,237,230,0.55);
+    }
+
+    /* paper grain */
+    body::before {
+      content: "";
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background-image:
+        radial-gradient(rgba(10,10,10,0.04) 1px, transparent 1px),
+        radial-gradient(rgba(10,10,10,0.03) 1px, transparent 1px);
+      background-size: 3px 3px, 7px 7px;
+      background-position: 0 0, 1px 2px;
+      mix-blend-mode: multiply;
+      opacity: 0.6;
+    }
+    body[data-invert="1"]::before {
+      background-image:
+        radial-gradient(rgba(241,237,230,0.05) 1px, transparent 1px),
+        radial-gradient(rgba(241,237,230,0.03) 1px, transparent 1px);
+      mix-blend-mode: screen;
+    }
+    /* cuando el shader está activo el grain queda muy ruidoso sobre webgl */
+    body[data-shader="1"]::before { display: none; }
+    body[data-shader="1"] {
+      background: var(--bg);
+      --ink: #ffffff;
+      --ink-2: #ffffff;
+      --rule: rgba(255,255,255,0.22);
+      --rule-strong: rgba(255,255,255,0.6);
+    }
+
+    /* selection */
+    ::selection { background: var(--accent); color: var(--bg); }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="shader-background.jsx"></script>
+  <script type="text/babel" src="hero.jsx"></script>
+</body>
+</html>
