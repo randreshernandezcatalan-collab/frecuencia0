@@ -278,6 +278,42 @@ const FZ_CSS = `
       margin-top: 16px;
     }
   }
+
+  @media (max-width: 768px) {
+    header {
+      display: grid !important;
+      grid-template-columns: 1fr auto !important;
+      grid-template-rows: auto auto !important;
+      gap: 10px 16px !important;
+      padding: 12px 16px !important;
+      height: auto !important;
+    }
+    header > div:first-child {
+      grid-column: 1 !important;
+      grid-row: 1 !important;
+    }
+    header > div:first-child > span:last-child {
+      display: none !important;
+    }
+    header > nav {
+      grid-column: span 2 !important;
+      grid-row: 2 !important;
+      justify-self: center !important;
+      width: 100% !important;
+      border-top: 1px solid var(--rule) !important;
+      padding-top: 10px !important;
+      gap: 16px !important;
+      justify-content: center !important;
+    }
+    header > div:last-child {
+      grid-column: 2 !important;
+      grid-row: 1 !important;
+      justify-self: end !important;
+    }
+    header > div:last-child > span:first-child {
+      display: none !important;
+    }
+  }
 `;
 
 // ── ZeroMark ───────────────────────────────────────────────────
@@ -1591,7 +1627,7 @@ function App() {
               opacity: 0.8,
               fontFamily: "var(--sans)"
             }}>
-              Frecuencia Cero no es solo música; es una transmisión cruda, visceral y brutalista que nace en Feelingmusic. Conectando sintetizadores analógicos, ritmos distorsionados y voces desgarradas, creamos una experiencia inmersiva única en cada presentación en vivo.
+              Frecuencia Cero no es solo música; es una transmisión vibrante y electrizante que nace en Feelingmusic. Conectando teclados, ritmos contagiosos y voces llenas de energía, creamos una experiencia inmersiva y llena de vida en cada presentación en vivo
             </p>
           </div>
           <div className="scroll-expand-right">

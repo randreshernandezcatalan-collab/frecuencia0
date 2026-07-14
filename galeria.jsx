@@ -462,6 +462,42 @@ const G_CSS = `
     .g-bento-item.span-wide,
     .g-bento-item.span-wide-tall { grid-column: span 2; }
   }
+
+  @media (max-width: 768px) {
+    header {
+      display: grid !important;
+      grid-template-columns: 1fr auto !important;
+      grid-template-rows: auto auto !important;
+      gap: 10px 16px !important;
+      padding: 12px 16px !important;
+      height: auto !important;
+    }
+    header > div:first-child {
+      grid-column: 1 !important;
+      grid-row: 1 !important;
+    }
+    header > div:first-child > span:last-child {
+      display: none !important;
+    }
+    header > nav {
+      grid-column: span 2 !important;
+      grid-row: 2 !important;
+      justify-self: center !important;
+      width: 100% !important;
+      border-top: 1px solid var(--rule) !important;
+      padding-top: 10px !important;
+      gap: 16px !important;
+      justify-content: center !important;
+    }
+    header > div:last-child {
+      grid-column: 2 !important;
+      grid-row: 1 !important;
+      justify-self: end !important;
+    }
+    header > div:last-child > span:first-child {
+      display: none !important;
+    }
+  }
 `;
 
 /* ===========================================================
