@@ -15,11 +15,11 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 const NAV = ["Integrantes", "Shows", "Música", "Galería"];
 
 const BAND_MEMBERS = [
-  { idx: "01", name: "Fer",    role: "Voz",      image: "uploads/fer.png" },
-  { idx: "02", name: "Richi",  role: "Teclado",  image: "uploads/richi.png" },
-  { idx: "03", name: "Vic",    role: "Bajo",     image: "uploads/vic.png" },
-  { idx: "04", name: "Patito", role: "Guitarra", image: "uploads/patito.png" },
-  { idx: "05", name: "Bruno",  role: "Batería",  image: "uploads/bruno.png" },
+  { idx: "01", name: "Fer",    role: "Voz",      image: "uploads/fer.png",      imagePos: "center 30%" },
+  { idx: "02", name: "Richi",  role: "Teclado",  image: "uploads/richi.png",    imagePos: "center 30%" },
+  { idx: "03", name: "Vic",    role: "Bajo",     image: "uploads/vic.png",      imagePos: "center top" },
+  { idx: "04", name: "Patito", role: "Guitarra", image: "uploads/patito.png",   imagePos: "center 35%" },
+  { idx: "05", name: "Bruno",  role: "Batería",  image: "uploads/bruno.png",    imagePos: "center top" },
 ];
 
 // Fuente única de fechas — banners del hero y sección Tour 2026 leen de aquí.
@@ -900,7 +900,7 @@ function MembersSection() {
               zIndex: 0,
               backgroundImage: `url(${m.image})`,
               backgroundSize: "cover",
-              backgroundPosition: "center top",
+              backgroundPosition: m.imagePos || "center top",
               opacity: hoveredIndex === index ? 1 : 0,
               transition: "opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)",
               transform: hoveredIndex === index ? "scale(1.08)" : "scale(1.0)",
