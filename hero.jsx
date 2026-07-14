@@ -164,7 +164,7 @@ const FZ_CSS = `
     overflow: hidden;
     border: 1px solid var(--rule-strong);
     padding: 24px 20px;
-    min-height: 180px;
+    min-height: 280px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
