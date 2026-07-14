@@ -15,11 +15,11 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 const NAV = ["Integrantes", "Shows", "Música", "Galería"];
 
 const BAND_MEMBERS = [
-  { idx: "01", name: "Fer",    role: "Voz",      image: "uploads/voz.png" },
-  { idx: "02", name: "Richi",  role: "Teclado",  image: "uploads/piano.png" },
-  { idx: "03", name: "Vic",    role: "Bajo",     image: "uploads/bajo.png" },
-  { idx: "04", name: "Patito", role: "Guitarra", image: "uploads/guitarra.png" },
-  { idx: "05", name: "Bruno",  role: "Batería",  image: "uploads/bateria.png" },
+  { idx: "01", name: "Fer",    role: "Voz",      image: "uploads/fer.png" },
+  { idx: "02", name: "Richi",  role: "Teclado",  image: "uploads/richi.png" },
+  { idx: "03", name: "Vic",    role: "Bajo",     image: "uploads/vic.png" },
+  { idx: "04", name: "Patito", role: "Guitarra", image: "uploads/patito.png" },
+  { idx: "05", name: "Bruno",  role: "Batería",  image: "uploads/bruno.png" },
 ];
 
 // Fuente única de fechas — banners del hero y sección Tour 2026 leen de aquí.
