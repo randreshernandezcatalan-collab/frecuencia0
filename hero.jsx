@@ -768,11 +768,41 @@ function HeroStage({ tweaks, isPlaying, onTogglePlay }) {
           <CTAs isPlaying={isPlaying} onTogglePlay={onTogglePlay} />
         </div>
       </div>
+    </div>
+  );
+}
 
-      {/* Banners de fechas destacadas */}
+// ── Sección de fechas (banners, movida fuera del hero) ─────────
+function DatesSection() {
+  return (
+    <section id="fechas" style={{
+      position: "relative", zIndex: 5,
+      padding: "100px 32px 40px",
+    }}>
+      <div style={{
+        display: "flex", justifyContent: "space-between", alignItems: "baseline",
+        gap: 24, flexWrap: "wrap",
+        borderBottom: "1px solid var(--rule-strong)",
+        paddingBottom: 14, marginBottom: 32,
+      }}>
+        <div style={{
+          fontFamily: "var(--mono)", fontSize: 11,
+          letterSpacing: "0.18em", textTransform: "uppercase", opacity: 0.65,
+        }}>↳ Gira ondas perdidas · 2026</div>
+        <h2 style={{
+          fontFamily: "var(--display)",
+          fontSize: "clamp(32px, 5vw, 64px)",
+          letterSpacing: "-0.03em",
+          textTransform: "uppercase",
+          lineHeight: 0.95,
+        }}>
+          Fechas <span style={{ color: "var(--accent)" }}>destacadas</span>
+        </h2>
+      </div>
+
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {SHOWS.map((b, i) => (
-          <div key={b.venue + b.date} className="fz-rise d5" style={{
+          <div key={b.venue + b.date} style={{
             position: "relative",
             overflow: "hidden",
             textAlign: "center",
@@ -781,7 +811,6 @@ function HeroStage({ tweaks, isPlaying, onTogglePlay }) {
             background: b.past ? "rgba(0,0,0,0.55)" : "rgba(0,0,0,0.35)",
             backdropFilter: "blur(8px)",
             WebkitBackdropFilter: "blur(8px)",
-            animationDelay: `${0.75 + i * 0.08}s`,
             opacity: b.past ? 0.6 : 1,
             transition: "opacity 0.3s",
           }}>
@@ -855,7 +884,208 @@ function HeroStage({ tweaks, isPlaying, onTogglePlay }) {
           </div>
         ))}
       </div>
-    </div>
+    </section>
+  );
+}
+
+// ── Sección Video (adaptación del player-layout a React plano) ──
+function VideoSection() {
+  const videoRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [current, setCurrent] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  const fmt = (s) => {
+    if (!s || isNaN(s)) return "0:00";
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${String(sec).padStart(2, "0")}`;
+  };
+  const progress = duration ? current / duration : 0;
+
+  const togglePlay = () => {
+    const v = videoRef.current; if (!v) return;
+    if (v.paused) v.play().catch(() => {}); else v.pause();
+  };
+  const toggleMute = () => {
+    const v = videoRef.current; if (!v) return;
+    v.muted = !v.muted; setMuted(v.muted);
+  };
+  const onSeek = (e) => {
+    const v = videoRef.current; if (!v || !duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    v.currentTime = ((e.clientX - rect.left) / rect.width) * duration;
+  };
+  const toggleFullscreen = () => {
+    const el = videoRef.current && videoRef.current.parentElement;
+    if (!el) return;
+    if (!document.fullscreenElement) { if (el.requestFullscreen) el.requestFullscreen(); }
+    else if (document.exitFullscreen) document.exitFullscreen();
+  };
+
+  const iconBtn = {
+    pointerEvents: "auto", background: "transparent", border: 0, color: "#fff",
+    cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center",
+    padding: 6, transition: "opacity 0.2s", opacity: 0.9,
+  };
+
+  return (
+    <section id="video" style={{
+      position: "relative", zIndex: 5,
+      padding: "100px 32px 40px",
+    }}>
+      <div style={{
+        display: "flex", justifyContent: "space-between", alignItems: "baseline",
+        gap: 24, flexWrap: "wrap",
+        borderBottom: "1px solid var(--rule-strong)",
+        paddingBottom: 14, marginBottom: 32,
+      }}>
+        <div style={{
+          fontFamily: "var(--mono)", fontSize: 11,
+          letterSpacing: "0.18em", textTransform: "uppercase", opacity: 0.65,
+        }}>↳ En cámara</div>
+        <h2 style={{
+          fontFamily: "var(--display)",
+          fontSize: "clamp(32px, 5vw, 64px)",
+          letterSpacing: "-0.03em",
+          textTransform: "uppercase",
+          lineHeight: 0.95,
+        }}>
+          Presentación <span style={{ color: "var(--accent)" }}>Barro Vivo</span>
+        </h2>
+      </div>
+
+      {/* PlayerContainer */}
+      <div style={{ maxWidth: 960, margin: "0 auto" }}>
+        <div style={{
+          position: "relative",
+          width: "100%",
+          aspectRatio: "16 / 9",
+          overflow: "hidden",
+          border: "1px solid var(--rule-strong)",
+          background: "#000",
+        }}>
+          <video
+            ref={videoRef}
+            src="uploads/video1.mp4"
+            playsInline
+            preload="metadata"
+            onClick={togglePlay}
+            onPlay={() => setPlaying(true)}
+            onPause={() => setPlaying(false)}
+            onTimeUpdate={(e) => setCurrent(e.target.currentTime)}
+            onLoadedMetadata={(e) => setDuration(e.target.duration)}
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", cursor: "pointer" }}
+          />
+
+          {/* Gradient overlay para legibilidad de controles */}
+          <div style={{
+            position: "absolute", inset: 0, pointerEvents: "none", zIndex: 10,
+            background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 45%, rgba(0,0,0,0.4) 100%)",
+          }} />
+
+          {/* Controls container */}
+          <div style={{
+            position: "absolute", inset: 0, zIndex: 20,
+            display: "flex", flexDirection: "column",
+            pointerEvents: "none",
+          }}>
+            {/* Top */}
+            <div style={{
+              display: "flex", justifyContent: "space-between", alignItems: "flex-start",
+              padding: 16,
+            }}>
+              <div>
+                <div style={{
+                  fontFamily: "var(--mono)", fontSize: 12, fontWeight: 600,
+                  letterSpacing: "0.14em", textTransform: "uppercase", color: "#fff",
+                }}>Frecuencia Cero</div>
+                <div style={{
+                  fontFamily: "var(--mono)", fontSize: 10,
+                  letterSpacing: "0.14em", textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.6)", marginTop: 2,
+                }}>Sesión 04 · En vivo</div>
+              </div>
+            </div>
+
+            {/* Botón play central (cuando está pausado) */}
+            {!playing && (
+              <button onClick={togglePlay} aria-label="Reproducir" style={{
+                pointerEvents: "auto",
+                position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
+                width: 72, height: 72, borderRadius: "50%",
+                background: "var(--accent)", color: "#000", border: 0, cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                boxShadow: "0 8px 30px rgba(0,0,0,0.5)",
+              }}>
+                <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 26, height: 26, marginLeft: 3 }}>
+                  <path d="M8 5v14l11-7L8 5z" />
+                </svg>
+              </button>
+            )}
+
+            {/* Bottom */}
+            <div style={{
+              marginTop: "auto", padding: 16,
+              display: "flex", flexDirection: "column", gap: 12,
+            }}>
+              {/* Barra de progreso */}
+              <div style={{
+                display: "flex", alignItems: "center", gap: 10,
+                fontFamily: "var(--mono)", fontSize: 11,
+                color: "rgba(255,255,255,0.85)", fontVariantNumeric: "tabular-nums",
+              }}>
+                <span>{fmt(current)}</span>
+                <div onClick={onSeek} style={{
+                  pointerEvents: "auto",
+                  position: "relative", height: 4, flex: 1,
+                  borderRadius: 999, background: "rgba(255,255,255,0.25)", cursor: "pointer",
+                }}>
+                  <div style={{
+                    position: "absolute", top: 0, bottom: 0, left: 0,
+                    width: `${progress * 100}%`, background: "var(--accent)", borderRadius: 999,
+                  }} />
+                  <div style={{
+                    position: "absolute", left: `${progress * 100}%`, top: "50%",
+                    width: 12, height: 12, transform: "translate(-50%, -50%)",
+                    borderRadius: "50%", background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,0.4)",
+                  }} />
+                </div>
+                <span>{fmt(duration)}</span>
+              </div>
+
+              {/* Botones */}
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <button onClick={togglePlay} aria-label={playing ? "Pausar" : "Reproducir"} style={iconBtn}>
+                  {playing ? (
+                    <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 22, height: 22 }}><path d="M6 5h4v14H6zM14 5h4v14h-4z" /></svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 22, height: 22 }}><path d="M8 5v14l11-7L8 5z" /></svg>
+                  )}
+                </button>
+                <button onClick={toggleMute} aria-label={muted ? "Activar sonido" : "Silenciar"} style={iconBtn}>
+                  {muted ? (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 22, height: 22 }}>
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 22, height: 22 }}>
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                    </svg>
+                  )}
+                </button>
+                <button onClick={toggleFullscreen} aria-label="Pantalla completa" style={{ ...iconBtn, marginLeft: "auto" }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 20, height: 20 }}>
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -1070,7 +1300,8 @@ function ShowsSection({ onHoverImage, onHoverSection }) {
 
   // Map our shows to Projects Data
   const PROJECTS_DATA = SHOWS.map((s, index) => {
-    const imagePath = `uploads/${index + 1}.png`;
+    const ext = index === 4 ? "jpeg" : "png";
+    const imagePath = `uploads/${index + 1}.${ext}`;
     return {
       id: index + 1,
       artist: s.date,
@@ -1697,9 +1928,14 @@ function App() {
         </div>
       </ScrollExpandMedia>
 
-      {t.ticker && <Marquee items={tickerItems} />}
+      <VideoSection />
 
       <MembersSection />
+
+      <DatesSection />
+
+      {t.ticker && <Marquee items={tickerItems} />}
+
       <ShowsSection onHoverImage={setActiveBg} onHoverSection={setIsHoveringShows} />
 
       <TweaksPanel title="Tweaks">
