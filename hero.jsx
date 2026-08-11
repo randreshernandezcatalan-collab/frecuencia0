@@ -15,21 +15,28 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 const NAV = ["Integrantes", "Shows", "Música", "Galería"];
 
 const BAND_MEMBERS = [
-  { idx: "01", name: "Fer",    role: "Voz",      image: "uploads/fer.png",      imagePos: "center 20%",  imageSize: "auto 160%" },
-  { idx: "02", name: "Richi",  role: "Teclado",  image: "uploads/richi.png",    imagePos: "center 20%",  imageSize: "auto 160%" },
+  { idx: "01", name: "Fer",    role: "Voz",      image: "uploads/fer_sq.png",    imagePos: "center top",  imageSize: "cover" },
+  { idx: "02", name: "Richi",  role: "Teclado",  image: "uploads/richi_sq.png",  imagePos: "center top",  imageSize: "cover" },
   { idx: "03", name: "Vic",    role: "Bajo",     image: "uploads/vic.png",      imagePos: "center top",  imageSize: "cover" },
-  { idx: "04", name: "Patito", role: "Guitarra", image: "uploads/patito.png",   imagePos: "center 25%",  imageSize: "auto 160%" },
+  { idx: "04", name: "Patito", role: "Guitarra", image: "uploads/patito_sq.png", imagePos: "center top",  imageSize: "cover" },
   { idx: "05", name: "Bruno",  role: "Batería",  image: "uploads/bruno.png",    imagePos: "center top",  imageSize: "cover" },
 ];
 
 // Fuente única de fechas — banners del hero y sección Tour 2026 leen de aquí.
 const SHOWS = [
   {
+    date: "09.08", day: "Domingo", longDate: "09 de agosto",
+    venue: "Santa María Oriente",
+    eyebrow: "Próxima fecha",
+    ticketUrl: "",
+    past: true,
+  },
+  {
     date: "17.07", day: "Viernes", longDate: "17 de julio",
     venue: "Barro Viejo Restaurante",
     eyebrow: "Próxima fecha",
     ticketUrl: "https://www.instagram.com/barrovivorestaurant/",
-    past: false,
+    past: true,
   },
   {
     date: "01.05", day: "Viernes", longDate: "01 de mayo",
@@ -1643,8 +1650,6 @@ function App() {
         </div>
       </main>
 
-      {t.ticker && <Marquee items={tickerItems} />}
-
       <ScrollExpandMedia
         mediaType="image"
         mediaSrc="uploads/1.png"
@@ -1691,6 +1696,8 @@ function App() {
           </div>
         </div>
       </ScrollExpandMedia>
+
+      {t.ticker && <Marquee items={tickerItems} />}
 
       <MembersSection />
       <ShowsSection onHoverImage={setActiveBg} onHoverSection={setIsHoveringShows} />
